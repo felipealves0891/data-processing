@@ -35,6 +35,25 @@ namespace DataProcessing.Tests
         public void RunTest()
         {
             //Arrange
+            var mockInput = ConfigureMockInput();
+            var mockOutput = ConfigureMockOutput();
+            var mockTrans = ConfigureMockTransformation();
+
+            var processor = new Processor(mockInput.Object, mockOutput.Object);
+            processor.AddTransformation(mockTrans.Object);
+
+            //Act
+            processor.Run();
+
+            //Assert
+            mockInput.Verify();
+            mockTrans.Verify();
+            mockOutput.Verify();
+
+        }
+
+        private Mock<IInput> ConfigureMockInput()
+        {
             var mockInput = new Mock<IInput>();
 
             mockInput.SetupSequence(x => x.HasData())
@@ -52,6 +71,11 @@ namespace DataProcessing.Tests
 
             mockInput.Setup(x => x.Close()).Verifiable();
 
+            return mockInput;
+        }
+
+        private Mock<IOutput> ConfigureMockOutput()
+        {
             var mockOutput = new Mock<IOutput>();
 
             mockOutput.Setup(x => x.Set(It.Is<string[]>(s => s == _outputData[0]))).Verifiable();
@@ -60,6 +84,11 @@ namespace DataProcessing.Tests
 
             mockOutput.Setup(x => x.Close()).Verifiable();
 
+            return mockOutput;
+        }
+
+        private Mock<ITransformation> ConfigureMockTransformation()
+        {
             var mockTrans = new Mock<ITransformation>();
 
             mockTrans.SetupSequence(x => x.Transform(It.IsAny<string[]>()))
@@ -68,17 +97,7 @@ namespace DataProcessing.Tests
                 .Returns(_outputData[2])
                 .Throws(new Exception("São esperados 3 entradas"));
 
-            var processor = new Processor(mockInput.Object, mockOutput.Object);
-            processor.AddTransformation(mockTrans.Object);
-
-            //Act
-            processor.Run();
-
-            //Assert
-            mockInput.Verify();
-            mockTrans.Verify();
-            mockOutput.Verify();
-
+            return mockTrans;
         }
     }
 }
