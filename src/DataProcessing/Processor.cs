@@ -13,6 +13,8 @@ namespace DataProcessing
 
         private List<ITransformation> _transformations;
 
+        private int _readLines;
+
         public Processor(IInput input, IOutput output)
         {
             _input = input;
@@ -35,8 +37,10 @@ namespace DataProcessing
             return this;
         }
 
-        public void Run()
+        public int Run()
         {
+            _readLines = 0;
+
             while(_input.HasData())
             {
                 var data = _input.GetData();
@@ -45,10 +49,13 @@ namespace DataProcessing
                     data = transformation.Transform(data);
 
                 _output.Set(data);
+                _readLines++;
             }
 
             _input.Close();
             _output.Close();
+            
+            return _readLines;
         }
     }
 }

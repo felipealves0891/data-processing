@@ -3,7 +3,6 @@ using DataProcessing.Outputs;
 using DataProcessing.Transformations;
 using Moq;
 using System;
-
 using Xunit;
 
 namespace DataProcessing.Tests
@@ -38,18 +37,17 @@ namespace DataProcessing.Tests
             var mockInput = ConfigureMockInput();
             var mockOutput = ConfigureMockOutput();
             var mockTrans = ConfigureMockTransformation();
-
             var processor = new Processor(mockInput.Object, mockOutput.Object);
             processor.AddTransformation(mockTrans.Object);
 
             //Act
-            processor.Run();
+            var lines = processor.Run();
 
             //Assert
+            Assert.Equal(3, lines);
             mockInput.Verify();
             mockTrans.Verify();
             mockOutput.Verify();
-
         }
 
         private Mock<IInput> ConfigureMockInput()
