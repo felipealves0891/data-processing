@@ -5,15 +5,13 @@ using System.Collections.Generic;
 
 namespace DataProcessing
 {
-    public class Processor
+    public class Processor : ProcessorTrack
     {
         private readonly IInput _input;
 
         private readonly IOutput _output;
 
         private List<ITransformation> _transformations;
-
-        private int _readLines;
 
         public Processor(IInput input, IOutput output)
         {
@@ -39,7 +37,7 @@ namespace DataProcessing
 
         public int Run()
         {
-            _readLines = 0;
+            StartTrack();
 
             while(_input.HasData())
             {
@@ -49,13 +47,15 @@ namespace DataProcessing
                     data = transformation.Transform(data);
 
                 _output.Set(data);
-                _readLines++;
+                OnTrack();
             }
 
+            StopTrack();
+            
             _input.Close();
             _output.Close();
-            
             return _readLines;
         }
+
     }
 }

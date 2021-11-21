@@ -40,11 +40,17 @@ namespace DataProcessing.Tests
             var processor = new Processor(mockInput.Object, mockOutput.Object);
             processor.AddTransformation(mockTrans.Object);
 
+            var eventCounter = 0;
+            processor.Track += (sender, statistic) => {
+                eventCounter++;
+            };
+
             //Act
             var lines = processor.Run();
 
             //Assert
             Assert.Equal(3, lines);
+            Assert.Equal(3, eventCounter);
             mockInput.Verify();
             mockTrans.Verify();
             mockOutput.Verify();
