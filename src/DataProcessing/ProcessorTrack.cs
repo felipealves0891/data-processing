@@ -16,6 +16,7 @@ namespace DataProcessing
 
         public ProcessorTrack()
         {
+            Track = default!;
             _readLines = 0;
             _stopwatch = new Stopwatch();
             _previousCollections = new int[]

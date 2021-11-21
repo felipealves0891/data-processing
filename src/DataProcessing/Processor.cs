@@ -14,6 +14,7 @@ namespace DataProcessing
         private List<ITransformation> _transformations;
 
         public Processor(IInput input, IOutput output)
+            : base()
         {
             _input = input;
             _output = output;
