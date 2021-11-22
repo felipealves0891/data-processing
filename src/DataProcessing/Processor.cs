@@ -46,8 +46,10 @@ namespace DataProcessing
                 
                 foreach(var transformation in _transformations)
                     data = transformation.Transform(data);
+                
+                if(data != null && data.Length > 0)
+                    _output.Set(data);
 
-                _output.Set(data);
                 OnTrack();
             }
 

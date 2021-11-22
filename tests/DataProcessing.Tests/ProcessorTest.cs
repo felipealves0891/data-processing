@@ -20,6 +20,7 @@ namespace DataProcessing.Tests
                 new string[] { "0", "01/11/2021", "Aprovado"},
                 new string[] { "1", "02/11/2021", "Aprovado"}, 
                 new string[] { "3", "03/11/2021", "Reprovado"},
+                new string[] { "2", "04/11/2021", "Pendente"}
             };
 
             _outputData = new string[][]
@@ -38,6 +39,7 @@ namespace DataProcessing.Tests
             var mockOutput = ConfigureMockOutput();
             var mockTrans = ConfigureMockTransformation();
             var processor = new Processor(mockInput.Object, mockOutput.Object);
+
             processor.AddTransformation(mockTrans.Object);
 
             var eventCounter = 0;
@@ -49,8 +51,8 @@ namespace DataProcessing.Tests
             var lines = processor.Run();
 
             //Assert
-            Assert.Equal(3, lines);
-            Assert.Equal(3, eventCounter);
+            Assert.Equal(4, lines);
+            Assert.Equal(4, eventCounter);
             mockInput.Verify();
             mockTrans.Verify();
             mockOutput.Verify();
@@ -64,6 +66,7 @@ namespace DataProcessing.Tests
                     .Returns(true)
                     .Returns(true)
                     .Returns(true)
+                    .Returns(true)
                     .Returns(false)
                     .Throws(new Exception("Loop deve encerrar após o false"));
 
@@ -71,6 +74,7 @@ namespace DataProcessing.Tests
                     .Returns(_inputData[0])
                     .Returns(_inputData[1])
                     .Returns(_inputData[2])
+                    .Returns(_inputData[3])
                     .Throws(new Exception("Consulta após o fim dos dados"));
 
             mockInput.Setup(x => x.Close()).Verifiable();
@@ -99,6 +103,7 @@ namespace DataProcessing.Tests
                 .Returns(_outputData[0])
                 .Returns(_outputData[1])
                 .Returns(_outputData[2])
+                .Returns(new string[] {})
                 .Throws(new Exception("São esperados 3 entradas"));
 
             return mockTrans;
