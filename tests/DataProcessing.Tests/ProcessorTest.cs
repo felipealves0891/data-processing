@@ -108,5 +108,46 @@ namespace DataProcessing.Tests
 
             return mockTrans;
         }
+
+        [Fact]
+        public void ExistsTransformationTest()
+        {
+            //Arrange
+            Mock<ITransformation> mockTrans1 = new Mock<ITransformation>();
+            Mock<ITransformation> mockTrans2 = new Mock<ITransformation>();
+            Mock<IInput> mockInput = new Mock<IInput>();
+            Mock<IOutput> mockOutput = new Mock<IOutput>();
+
+            //Act
+            Processor processor = new Processor(mockInput.Object, mockOutput.Object);
+            processor.AddTransformation(mockTrans1.Object);
+
+            //Assert
+            Assert.True(processor.ExistsTransformation(mockTrans1.Object), 
+                "Valida se a transformação 1 existe!");
+            Assert.False(processor.ExistsTransformation(mockTrans2.Object), 
+                "Valida se a transformação 2 não existe!");
+        }
+
+        [Fact]
+        public void RemoveTransformation()
+        {
+            //Arrange
+            Mock<ITransformation> mockTrans1 = new Mock<ITransformation>();
+            Mock<IInput> mockInput = new Mock<IInput>();
+            Mock<IOutput> mockOutput = new Mock<IOutput>();
+
+            //Act
+            Processor processor = new Processor(mockInput.Object, mockOutput.Object);
+            ITransformation transformation = mockTrans1.Object;
+            processor.AddTransformation(transformation);
+            Assert.True(processor.ExistsTransformation(transformation), 
+                "Confirma que a transformação foi adicionada!");
+            processor.RemoveTransformation(transformation);
+
+            //Assert
+            Assert.False(processor.ExistsTransformation(transformation), 
+                "Valida se a transformação foi removida!");
+        }
     }
 }

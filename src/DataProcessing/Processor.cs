@@ -36,6 +36,11 @@ namespace DataProcessing
             return this;
         }
 
+        public bool ExistsTransformation(ITransformation transformation)
+        {
+            return _transformations.Exists(x => x == transformation);
+        }
+
         public int Run()
         {
             StartTrack();
