@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+    ports:
+      - "1433:1433"
+    environment:
+      - MSSQL_PID=Express
+      - SA_PASSWORD=MyPass@word
+      - ACCEPT_EULA=Y
