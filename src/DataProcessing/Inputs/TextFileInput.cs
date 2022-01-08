@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 namespace DataProcessing.Inputs
 {
@@ -11,6 +12,12 @@ namespace DataProcessing.Inputs
         private string? _line;
 
         private StreamReader _stream;
+
+        private List<string> _columns = new List<string>();
+
+        private string _column = string.Empty;
+
+        private bool _isEscape = false;
 
         public TextFileInput(Stream stream, char delimiter = ';')
         {
@@ -28,8 +35,32 @@ namespace DataProcessing.Inputs
         {
             if(_line == null)
                 return new string[] {};
+            
+            _columns.Clear();
+            _column = string.Empty;
+            _isEscape = false;
 
-            return _line.Split(_delimiter);
+            for (int i = 0; i < _line.Length; i++)
+            {
+                if(_line[i] == '"')
+                {
+                    _isEscape = !_isEscape;
+                    continue;
+                }
+                
+                if(_line[i] == _delimiter && !_isEscape)
+                {
+                    _columns.Add(_column);
+                    _column = string.Empty;
+                }
+                else
+                {
+                    _column += _line[i];
+                }
+            }
+
+            _columns.Add(_column);
+            return _columns.ToArray();
         }
 
         public void Close()
