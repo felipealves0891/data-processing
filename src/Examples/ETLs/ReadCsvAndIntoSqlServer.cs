@@ -42,11 +42,11 @@ namespace Examples.ETLs
             processor.Run();
             
             // Resultado
-            // Rows : 62.405
-            // Time : 03:58
-            // R\S  : 262
-            // Gen0 : 109
-            // Gen1 : 10
+            // Rows : 62.387
+            // Time : 03:26
+            // R\S  : 302
+            // Gen0 : 170
+            // Gen1 : 15
             // Gen2 : 1
             // Memory : 32 mb
 
