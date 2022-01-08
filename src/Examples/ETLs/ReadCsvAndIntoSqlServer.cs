@@ -38,22 +38,18 @@ namespace Examples.ETLs
             //Execute ETL
             Processor processor = new Processor(input, output);
             processor.AddTransformation(rowSkip);
-            processor.Track += Traking;
+            processor.Track += Tracking.Track;
             processor.Run();
-        }
+            
+            // Resultado
+            // Rows : 62.405
+            // Time : 03:58
+            // R\S  : 262
+            // Gen0 : 109
+            // Gen1 : 10
+            // Gen2 : 1
+            // Memory : 32 mb
 
-        private static void Traking(object sender, TrackArgs e)
-        {
-            var time = (e.ElapsedTimeInSeconds / 60).ToString("0#") + ":" + (e.ElapsedTimeInSeconds % 60).ToString("0#");
-            Console.Clear();
-            Console.WriteLine($"\nRows : {e.Lines.ToString("n0")}");
-            Console.WriteLine($"Time : {time}");
-            Console.WriteLine($"R\\S  : {e.ReadPerSecond}");
-            Console.WriteLine($"Gen0 : {e.CollectionCountG0}");
-            Console.WriteLine($"Gen1 : {e.CollectionCountG1}");
-            Console.WriteLine($"Gen2 : {e.CollectionCountG2}");
-            Console.WriteLine($"Memory : {e.MemoryUsed} mb");
         }
-
     }
 }
