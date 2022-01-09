@@ -16,6 +16,9 @@ namespace DataProcessing.Inputs
             connection.Open();
             
             SqlCommand command = connection.CreateCommand();
+            command.CommandText = query;
+            command.CommandType = CommandType.Text;
+
             _reader = command.ExecuteReader();
             _header = true;
         }
@@ -36,9 +39,18 @@ namespace DataProcessing.Inputs
             for (int i = 0; i < len; i++) 
             {
                 if (_header)
+                {
                     data[i] = _reader.GetName(i);
+                }
                 else
-                    data[i] = _reader.GetString(i);
+                {
+                    object value = _reader.GetValue(i);
+                    if(value is null)
+                        data[i] = string.Empty;
+                    else
+                        data[i] = value.ToString();
+                }
+                    
             }
 
             _header = false;
