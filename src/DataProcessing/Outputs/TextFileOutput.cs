@@ -24,7 +24,18 @@ namespace DataProcessing.Outputs
             for(var i = 1; i < data.Length; i++)
             {
                 builder.Append(_delimiter);
-                builder.Append(data[i]);
+
+                if(data[i].IndexOf(_delimiter) > -1)
+                {
+                    builder.Append('"');
+                    builder.Append(data[i]);
+                    builder.Append('"');
+                }
+                else
+                {
+                    builder.Append(data[i]);
+                }
+                
             } 
 
             _stream.WriteLine(builder);
